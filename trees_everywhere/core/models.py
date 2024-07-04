@@ -4,32 +4,25 @@ from django.conf import settings
 
 
 class CustomUser(AbstractUser):
-    def print_name(self):
-        return self.first_name
+
+ 
+    def plant_tree(self, plant, location, account):
+        planted_tree = PlantedTree.objects.create(user=self, plant=plant, latitude=location[0], longiture=location[1], account=account)
+        return planted_tree
+        
+    
+    def plant_trees(self, plantings, account):
+        for plant, location in plantings:
+            self.plant_tree(plant, location, account)
 
     
-    # def plant_tree(self, plant, location, account):
-    #     try:
-
-    #         planted_tree = PlantedTree.objects.create(user=self, plant=plant, latitude=location[0], longiture=location[1], account=account)
-    #         return planted_tree
-    #     except OperationalError:
-    #         # Log the error or handle it accordingly
-    #         pass
-    
-    # def plant_trees(self, plantings, account):
-    #     for plant, location in plantings:
-    #         self.plant_tree(plant, location, account)
-
-    
-    # def get_profile(self,):
-    #     try:
-    #         profile = Profile.objects.filter(user=self)
-    #         if profile.count():
-    #             return profile.first()
-    #         return None
-    #     except OperationalError:
-    #         pass       
+    def get_profile(self,):
+       
+        profile = Profile.objects.filter(user=self)
+        if profile.count():
+            return profile.first()
+        return None
+              
 
          
 
