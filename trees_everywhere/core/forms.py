@@ -1,5 +1,6 @@
-from django import forms
+
 from .models import *
+from django import forms
 from django.contrib.auth.forms import AuthenticationForm ,UserCreationForm
 from django.contrib.auth import login, authenticate
 
@@ -40,9 +41,13 @@ class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Digite a Senha'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirme a Senha'}))
     account = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(active=True).order_by('id'),
-                                     initial=Account.objects.filter(active=True).first(),
+                                     
                                        widget=forms.SelectMultiple(attrs={'class': 'form-control multiselect select2 '}))
     bio = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Biografia'}))
+
+    def __init__(self, *args, **kwargs):
+        super(CustomAuthenticationForm, self).__init__(*args, *kwargs)
+        self.fields['account'].initial = Account.objects.filter(active=True).first()
 
 class AccountCreationForm(forms.ModelForm):
     class Meta:
@@ -101,7 +106,7 @@ class ProfileForm(forms.Form):
     first_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite o Nome'}))
     bio = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Biografia'}))
     accounts = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(active=True).order_by('id'),
-                                     initial=Account.objects.filter(active=True).first(),
+                                     
                                        widget=forms.SelectMultiple(attrs={'class': 'form-control multiselect select2 '}))
     
     
@@ -110,6 +115,7 @@ class ProfileForm(forms.Form):
         user = kwargs.pop('user', None)
         super(ProfileForm, self).__init__(*args, **kwargs)
 
+        self.fields['accounts'].initial = Account.objects.filter(active=True).first()
         if user:
             self.fields['username'].initial = user.username
             self.fields['email'].initial = user.email

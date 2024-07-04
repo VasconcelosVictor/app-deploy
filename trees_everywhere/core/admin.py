@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, Profile, Account, Plant, PlantedTree
 
 class ProfileInline(admin.StackedInline):

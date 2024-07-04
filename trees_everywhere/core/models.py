@@ -1,10 +1,10 @@
-from django.db import OperationalError, models
-from django.contrib.auth.models import AbstractUser
-from django.conf import settings
+from django.db import  models
+from django.contrib.auth.models import User
 
 
-class CustomUser(AbstractUser):
-
+class CustomUser(User):
+    def print(self):
+        return print('oi')
  
     def plant_tree(self, plant, location, account):
         planted_tree = PlantedTree.objects.create(user=self, plant=plant, latitude=location[0], longiture=location[1], account=account)
@@ -29,13 +29,13 @@ class CustomUser(AbstractUser):
 class Account(models.Model):
     name = models.CharField(max_length=255)
     active = models.BooleanField(default=True)
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='accounts')
+    users = models.ManyToManyField(CustomUser, related_name='accounts')
 
     def __str__(self):
         return self.name
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     bio = models.TextField(null=True, blank=True, default='')
     joined_date = models.DateField(auto_now_add=True)
 
@@ -50,7 +50,7 @@ class Plant(models.Model):
         return self.name
 
 class PlantedTree(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longiture = models.DecimalField(max_digits=9, decimal_places=6)

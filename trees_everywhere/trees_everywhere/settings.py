@@ -4,7 +4,7 @@ import os
 
 
 
-AUTH_USER_MODEL = 'core.CustomUser'
+# AUTH_USER_MODEL = 'core.CustomUser'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,7 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS =  ['.vercel.app' , '.now.sh']
 
-TESTING = True
+# TESTING = True
 
 # Application definition
 
